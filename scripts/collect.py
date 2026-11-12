@@ -51,5 +51,14 @@ for manufacturer,category,priority,query in QUERIES:
   except Exception as e:print('Query fehlgeschlagen:',query,repr(e))
 if not rows:raise SystemExit('Keine Treffer. Datenbank unverändert.')
 payload=json.dumps(list(rows.values()),ensure_ascii=False).encode('utf-8')
-response=request(BASE+'/rest/v1/articles?on_conflict=url',{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},payload,'POST')
+response = request(
+    BASE + '/rest/v1/articles?on_conflict=url',
+    {
+        'apikey': KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
+    },
+    payload,
+    'POST'
+)
 print('Importiert/aktualisiert:',len(rows),'Meldungen')
